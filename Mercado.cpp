@@ -45,7 +45,7 @@ void adicionar(Produtos* produtos, int& qtdAtual, int& idAtual) {
     cout << "Produto cadastrado com sucesso!\n";
 }
 
-
+//teste
 void removerPorNome(Produtos* produtos, int& qtdAtual, const string& nomeParaRemover) {
     bool encontrado = false;
 
