@@ -12,8 +12,11 @@ struct Produtos {
     int id;
 };
 
-
-
+    int quantidade;
+    int idGlobal = 1;
+    int qtdCadastrada = 0;
+    int capacidade = 5;
+    Produtos* produtos = new Produtos[capacidade];
 
 void adicionar(Produtos* produtos, int& qtdAtual, int& idAtual) {
     cout << "Digite o nome: " << endl;
@@ -75,7 +78,6 @@ int particaoArray(Produtos* produtos, int v0, int vN) {
     return prox_i;
 }
 
-
 void quickSortNOME(Produtos* produtos, int inicio, int fim) {
     if (inicio < fim) {
         int pivot = particaoArray(produtos, inicio, fim);
@@ -99,8 +101,6 @@ void bubbleSort(Produtos* produtos, int qtdCadastrada) {
     }
 }
 
-
-
 void exibirTodos(Produtos* produtos, int qtdCadastrada) {
     for (int i = 0; i < qtdCadastrada; i++) {
         cout << "\nNome: " << produtos[i].nome << endl;
@@ -110,35 +110,35 @@ void exibirTodos(Produtos* produtos, int qtdCadastrada) {
     }
 }
 
-int main() {
+void menu(){
+cout << R"(
+        =============================
+            MENU PRINCIPAL
+        =============================
+        
+        1. Cadastrar produto
+        2. Ordenar por quicksort
+        3. Ordenar por inserção direta
+        4. Ordenar por inserção binária
+        5. Ordenar por bubblesort
+        6. Ordenar por selecao
+        7. Ordenar por Heapsort
+        8. Ordenar por Mergesort
+        9. Mostrar todos
+
+        0. Sair")";
+}
+
+int opcoes(){
     int opcao;
-    int quantidade;
-    int idGlobal = 1;
-    int qtdCadastrada = 0;
-    int capacidade = 5;
-
-    
-    Produtos* produtos = new Produtos[capacidade];
-
-    do {
-        cout << "\nEscolha uma opcao:\n 
-        1. Cadastrar produto\n
-         2. Ordenar por quicksort\n
-          3. Ordenar por inserção direta\n
-           4. Ordenar por inserção binária\n
-            5. Ordenar por bubblesort\n
-             6. Ordenar por selecao\n
-              7. Ordenar por Heapsort\n
-               8. Ordenar por Mergesort\n
-                9. Mostrar todos\n
-                 0. Sair\n";
-        cin >> opcao;
+    cout <<"    : ";
+    cin >> opcao;
 
         switch (opcao) {
             case 1:
                 cout << "Quantos produtos deseja cadastrar? ";
                 cin >> quantidade;
-                
+
                 if (qtdCadastrada + quantidade > capacidade) {
                     cout << "Erro: Capacidade maxima do estoque excedida!\n";
                     break;
@@ -162,7 +162,7 @@ int main() {
                 
             }
             case 5: {
-                bubblesort(produtos, qtdCadastrada - 1);
+                bubbleSort(produtos, qtdCadastrada - 1);
                 break;
             }
             
@@ -175,14 +175,20 @@ int main() {
                 break;
             }
             case 0:{
-                cout << "Saindo...\n";
+                cout << "   Saindo...\n";
+                return -1;
                 break;
             }
             default:
                 cout << "Opcao invalida!\n";
                 break;
         }
-    } while (opcao != 0);
+    return 0;
+}
+
+int main() {
+   
+    do {menu();} while (opcoes() == 0);
 
     delete[] produtos;
 
