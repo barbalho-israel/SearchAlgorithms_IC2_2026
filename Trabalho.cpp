@@ -3,6 +3,23 @@
 #include <cmath>
 using namespace std;
 
+/*
+- Aprimorar menu
+- Descrição do problema
+- Algoritmos de busca
+
+    1. Inserção direta
+    2. Inserção binária
+    3. Seleção
+    4. Bubblesort
+    5. Heapsort
+    6. Fusão
+    7. QuickSort
+
+
+*/
+
+
 struct Produtos {
     string nome;
     string tipo;
