@@ -19,6 +19,7 @@ struct Produtos {
     Produtos* produtos = new Produtos[capacidade];
 
 void adicionar(Produtos* produtos, int& qtdAtual, int& idAtual) {
+    
     cout << "Digite o nome: " << endl;
     cin.ignore();
     getline(cin, produtos[qtdAtual].nome);
@@ -150,8 +151,6 @@ void exibirTodos(Produtos* produtos, int qtdCadastrada) {
         cout << "Valor promocional: " << produtos[i].valorPromocional << endl;
     }
 }
-
-
 
 void menu(){
 cout << R"(
