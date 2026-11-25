@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <chrono>
 #include <utility>
+#include <algorithm> 
 using namespace std;
 
 struct Produtos {
@@ -255,28 +257,10 @@ void exibirTodos(Produtos* produtos, int qtdCadastrada) {
     }
 }
 
-int main() {
+int opcoes(Produtos* produtos, int qtdCadastrada){
+    int continuar = 0;
     int opcao;
-
-    do {
-        cout << R"(
-        =============================
-            MENU PRINCIPAL
-        =============================
-        
-        1. Cadastrar produto
-        2. Ordenar por quicksort
-        3. Ordenar por inserção direta
-        4. Ordenar por inserção binária
-        5. Ordenar por bubblesort
-        6. Ordenar por SelectionSort
-        7. Ordenar por Heapsort
-        8. Ordenar por Mergesort
-        9. Mostrar todos
-
-        0. Sair
-)";
-        cin >> opcao;
+    cin >> opcao;
 
         switch (opcao) {
             case 1:
@@ -332,15 +316,67 @@ int main() {
 
             case 0:
                 cout << "   Saindo...\n";
+                continuar = 1;
                 break;
 
             default:
                 cout << "Opcao invalida!\n";
                 break;
         }
-    } while (opcao != 0);
+
+    return continuar;
+}
+
+int main() {
+    do {
+        cout << R"(
+        =============================
+            MENU PRINCIPAL
+        =============================
+        
+        1. Cadastrar produto
+        2. Ordenar por quicksort
+        3. Ordenar por inserção direta
+        4. Ordenar por inserção binária
+        5. Ordenar por bubblesort
+        6. Ordenar por SelectionSort
+        7. Ordenar por Heapsort
+        8. Ordenar por Mergesort
+        9. Mostrar todos
+
+        0. Sair
+)";
+        
+    } while (opcoes(produtos, qtdCadastrada) == 0);
 
     delete[] produtos;
 
+    //benchmark
+    int inicial = 10000; 
+    for(int i = inicial; i <= inicial*5; i+= inicial){
+        //cout << i << ": "<< endl;
+
+        Produtos* crescente = new Produtos[i];
+
+
+        Produtos* copiaCrescente = new Produtos[i];
+        copy(crescente, copiaCrescente + i, copiaCrescente);
+
+        Produtos* decrecente = new Produtos[i];
+        Produtos* aleatorio = new Produtos[i];
+
+        
+        delete[] copiaCrescente;
+
+        //gera os arrays e cópias
+
+        for(int i = 1; i < 9; i++){
+                opcoes(crescente,i);
+            }
+        delete[] crescente;
+        delete[] decrecente;
+        delete[] aleatorio;
+    }
+    
     return 0;
 }
