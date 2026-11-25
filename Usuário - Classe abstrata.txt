@@ -1,0 +1,27 @@
+Usuário - Classe abstrata
+Doador - SubClasse
+Instituição - SubClase
+Donatário ou Solicitante (Pessoa física) - SubClasse
+Doação - Classe Abstrata
+Doação monetária 
+Doação itens - classe abstrata
+
+Item classe genérica (todos os tipos de itens).
+
+
+EventosBeneficentes 
+
+Leilão
+rifa
+
+Festas
+Corridas
+Partidas esportivas
+Celebrações religiosas
+Vendas sociais
+
+
+ 
+
+
+
