@@ -528,7 +528,9 @@ int opcoes(Produtos* produtos, int& qtdCadastrada, int opcao) {
 
             tempo = chrono::duration_cast<chrono::nanoseconds>(fim - inicio).count();
             quickSortNOMES(copia, 0, qtdCadastrada - 1, comparacoes, movimentacoes);
+
             cout << "[QuickSort] Tempo: " << tempo << " ns | Comparacoes: " << comparacoes << " | Movimentacoes: " << movimentacoes << "\n";
+            
             delete[] copia;
             break;
         }
@@ -684,7 +686,7 @@ int main() {
     uniform_int_distribution<int> distribPorcentagem(0, 100);
 
     //benchmark
-    int inicial = 100; //define tanto o valor inicial quanto os 5 saltos iguais que serão efetuados
+    int inicial = 10000; //define tanto o valor inicial quanto os 5 saltos iguais que serão efetuados
     for(int i = inicial; i <= inicial*5; i+= inicial){
         cout << "n: " << i << endl;
 
@@ -750,17 +752,24 @@ int main() {
             Produtos* copiaAleatorio = new Produtos[i];
             copy(aleatorio, aleatorio + i, copiaAleatorio);
 
+            cout << "Crescente: ";
             opcoes(copiaCrescente, i, j);
+            
+            cout << "Decrescente: ";
             opcoes(copiaDecrescente, i, j);
+            
+            cout << "Aleatório: ";
             opcoes(copiaAleatorio, i, j);
 
             delete[] copiaCrescente;
             delete[] copiaDecrescente;
             delete[] copiaAleatorio;
+            cout << endl;
             }
         delete[] crescente;
         delete[] decrescente;
         delete[] aleatorio;
+        cout << endl;
     }
     return 0;
 }
