@@ -4,7 +4,10 @@
 #include <chrono>
 #include <utility>
 #include <algorithm>
+#include <random>
 #include <cstdlib>
+#include <iomanip> 
+#include <sstream> 
 
 using namespace std;
 
@@ -491,10 +494,9 @@ void exibirTodos(Produtos* produtos, int qtdCadastrada) {
     }
 }
 
-int opcoes(Produtos* produtos, int& qtdCadastrada, int opcaoForcada = -1) {
+int opcoes(Produtos* produtos, int& qtdCadastrada, int opcao) {
     int continuar = 0;
-    int opcao = opcaoForcada;
-    if (opcaoForcada == -1) {
+    if (opcao == -1) {
         cin >> opcao;
     }
 
@@ -647,6 +649,12 @@ int opcoes(Produtos* produtos, int& qtdCadastrada, int opcaoForcada = -1) {
     return continuar;
 }
 
+string formatarNome(int numero, int largura = 6) { //até 999.999 itens
+    ostringstream oss;
+    oss << "Item_" << setw(largura) << setfill('0') << numero;
+    return oss.str();
+}
+
 int main() {
     do {
         cout << R"(
@@ -666,56 +674,93 @@ int main() {
 
         0. Sair
 )";
-    } while (opcoes(produtos, qtdCadastrada) == 0);
+    } while (opcoes(produtos, qtdCadastrada, -1) == 0);
 
     delete[] produtos;
 
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<int> distribValor(1, 100);
+    uniform_int_distribution<int> distribPorcentagem(0, 100);
+
     //benchmark
-    int inicial = 10000; //define tanto o valor inicial quanto os 5 saltos iguais que serão efetuados
+    int inicial = 100; //define tanto o valor inicial quanto os 5 saltos iguais que serão efetuados
     for(int i = inicial; i <= inicial*5; i+= inicial){
         cout << "n: " << i << endl;
 
         Produtos* crescente = new Produtos[i];
-        Produtos* decrecente = new Produtos[i];
+        Produtos* decrescente = new Produtos[i];
         Produtos* aleatorio = new Produtos[i];
 
-        //gera os arrays com númeroas aleatórios
+        for (int k = 0; k < i; k++) {
+        crescente[k].nome = formatarNome(k + 1);
+        crescente[k].valor = distribValor(gen);
+    int chance = distribPorcentagem(gen);
+    if (chance > 50) {
+        crescente[k].porcentagemPromocao = static_cast<double>(distribValor(gen)) / 100.0;
+        crescente[k].valorPromocional = crescente[k].valor - (crescente[k].valor * crescente[k].porcentagemPromocao);
+    } else {
+        crescente[k].porcentagemPromocao = 0.0;
+        crescente[k].valorPromocional = crescente[k].valor;
+    }
+    crescente[k].id = k + 1;
+}
 
-        for(int k = 0; k < i; k++){
-            crescente[i].nome = "Item_" + to_string(i);
-            random_device rd;
-            mt19937 gen(rd());
-            uniform_int_distribution<int> distrib(1, 100);
-            crescente[i].valor = distrib(gen);
-            if(distrib(gen)> 50){
-                crescente[i].porcentagemPromocao = distrib(gen)/100;
-                crescente[i].valorPromocional = crescente[i].valor - (crescente[i].valor * crescente[i].porcentagemPromocao);
-            }
-            crescente[i].id = i+1;
+    for (int k = 0; k < i; k++) {
+        decrescente[k].nome = formatarNome(i - k);
+        decrescente[k].valor = distribValor(gen);
+        int chance = distribPorcentagem(gen);
+        if (chance > 50) {
+            decrescente[k].porcentagemPromocao = static_cast<double>(distribValor(gen)) / 100.0;
+            decrescente[k].valorPromocional = decrescente[k].valor - (decrescente[k].valor * decrescente[k].porcentagemPromocao);
+        } else {
+            decrescente[k].porcentagemPromocao = 0.0;
+            decrescente[k].valorPromocional = decrescente[k].valor;
         }
+        decrescente[k].id = i - k; 
+    }
+
+    for (int k = 0; k < i; k++) {
+        aleatorio[k].nome = formatarNome(k + 1);
+        aleatorio[k].valor = distribValor(gen);
+        int chance = distribPorcentagem(gen);
+        if (chance > 50) {
+            aleatorio[k].porcentagemPromocao = static_cast<double>(distribValor(gen)) / 100.0;
+            aleatorio[k].valorPromocional = aleatorio[k].valor - (aleatorio[k].valor * aleatorio[k].porcentagemPromocao);
+        } else {
+            aleatorio[k].porcentagemPromocao = 0.0;
+            aleatorio[k].valorPromocional = aleatorio[k].valor;
+        }
+        aleatorio[k].id = k + 1;
+    }
+
+    // Embaralha todos os elementos aleatoriamente
+    shuffle(aleatorio, aleatorio + i, gen);
 
         //percorre as opcoes passando uma cópia de cada tipo de array
+        //cada j corresponde a um algoritmo de ordenação
 
         for(int j = 2; j < 9; j++){
             Produtos* copiaCrescente = new Produtos[i];
             copy(crescente, crescente + i, copiaCrescente);
 
             Produtos* copiaDecrescente = new Produtos[i];
-            copy(decrecente, decrecente + i, copiaDecrescente);
+            copy(decrescente, decrescente + i, copiaDecrescente);
 
             Produtos* copiaAleatorio = new Produtos[i];
             copy(aleatorio, aleatorio + i, copiaAleatorio);
 
-            //inicio da marcação de tempo
-            opcoes(crescente,i);
-            //fim da marcação de tempo
-            cout << "Algoritmo: " << j << "     Tempo: " << endl; 
+            opcoes(copiaCrescente, i, j);
+            opcoes(copiaDecrescente, i, j);
+            opcoes(copiaAleatorio, i, j);
 
             delete[] copiaCrescente;
             delete[] copiaDecrescente;
             delete[] copiaAleatorio;
             }
         delete[] crescente;
-        delete[] decrecente;
+        delete[] decrescente;
         delete[] aleatorio;
     }
+    return 0;
+}
