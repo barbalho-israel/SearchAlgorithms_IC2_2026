@@ -2,10 +2,8 @@
 #include <string>
 #include <cmath>
 #include <chrono>
-#include <utility>
 #include <algorithm>
 #include <random>
-#include <cstdlib>
 #include <iomanip> 
 #include <sstream> 
 
@@ -484,7 +482,6 @@ void mergeSortPorNomeS(Produtos* produtos, int esquerda, int direita, long long&
     }
 }
 
-// ==================== UTILITARIOS E MENU ====================
 void exibirTodos(Produtos* produtos, int qtdCadastrada) {
     for (int i = 0; i < qtdCadastrada; i++) {
         cout << "\nNome: " << produtos[i].nome << endl;
@@ -495,7 +492,6 @@ void exibirTodos(Produtos* produtos, int qtdCadastrada) {
 }
 
 int opcoes(Produtos* produtos, int& qtdCadastrada, int opcao) {
-    int continuar = 0;
     if (opcao == -1) {
         cin >> opcao;
     }
@@ -640,7 +636,6 @@ int opcoes(Produtos* produtos, int& qtdCadastrada, int opcao) {
 
         case 0:
             cout << "   Saindo...\n";
-            continuar = 1;
             break;
 
         default:
@@ -648,7 +643,7 @@ int opcoes(Produtos* produtos, int& qtdCadastrada, int opcao) {
             break;
     }
 
-    return continuar;
+    return opcao;
 }
 
 string formatarNome(int numero, int largura = 6) { //até 999.999 itens
@@ -676,7 +671,7 @@ int main() {
 
         0. Sair
 )";
-    } while (opcoes(produtos, qtdCadastrada, -1) == 0);
+    } while (opcoes(produtos, qtdCadastrada, -1) != 0);
 
     delete[] produtos;
 
@@ -740,7 +735,7 @@ int main() {
     shuffle(aleatorio, aleatorio + i, gen);
 
         //percorre as opcoes passando uma cópia de cada tipo de array
-        //cada j corresponde a um algoritmo de ordenação
+        //cada j corresponde a um algoritmo de ordenação do switch da funcao opcoes
 
         for(int j = 2; j < 9; j++){
             Produtos* copiaCrescente = new Produtos[i];
