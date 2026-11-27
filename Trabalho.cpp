@@ -635,7 +635,7 @@ int opcoes(Produtos* produtos, int& qtdCadastrada, int opcao) {
             break;
 
         case 0:
-            cout << "   Saindo...\n";
+            cout << "   Saindo...\n\n";
             break;
 
         default:
@@ -680,8 +680,11 @@ int main() {
     uniform_int_distribution<int> distribValor(1, 100);
     uniform_int_distribution<int> distribPorcentagem(0, 100);
 
-    //benchmark
+
+    cout << "N inicial: " << endl;
     int inicial = 10000; //define tanto o valor inicial quanto os 5 saltos iguais que serão efetuados
+    cin >> inicial;
+    //benchmark 
     for(int i = inicial; i <= inicial*5; i+= inicial){
         cout << "n: " << i << endl;
 
